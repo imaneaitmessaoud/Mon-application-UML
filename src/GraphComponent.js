@@ -4,26 +4,36 @@ const GraphComponent = () => {
     useEffect(() => {
         const container = document.getElementById('graphContainer');
 
-        // Vérifiez que mxGraph est bien chargé depuis le CDN
         if (window.mxGraph && container) {
             const graph = new window.mxGraph(container);
-
-            // Permet le zoom avec la molette de la souris
             new window.mxRubberband(graph);
 
-            // Crée des cellules pour le graphe
-            const parent = graph.getDefaultParent();
-            graph.getModel().beginUpdate();
-            try {
-                const v1 = graph.insertVertex(parent, null, 'commande', 20, 20, 80, 30);
-                const v2 = graph.insertVertex(parent, null, 'produit', 200, 150, 80, 30);
-               // const v3 = graph.insertVertex(parent, null, 'qantite', 20, 20, 80, 30);
-                graph.insertEdge(parent, null, '', v1, v2);
-            } finally {
-                graph.getModel().endUpdate();
-            }
+            // Gérer l'événement de dépôt
+            container.addEventListener('dragover', (event) => {
+                event.preventDefault(); // Autorise le dépôt
+            });
 
-            // Empêche la sélection des cellules avec un double-clic
+            container.addEventListener('drop', (event) => {
+                event.preventDefault();
+                const elementType = event.dataTransfer.getData('elementType');
+                const parent = graph.getDefaultParent();
+                const x = event.offsetX;
+                const y = event.offsetY;
+
+                graph.getModel().beginUpdate();
+                try {
+                    if (elementType === 'class') {
+                        graph.insertVertex(parent, null, 'Classe', x, y, 80, 30);
+                    } else if (elementType === 'interface') {
+                        graph.insertVertex(parent, null, 'Interface', x, y, 80, 30);
+                    } else if (elementType === 'entity') {
+                        graph.insertVertex(parent, null, 'Entité', x, y, 80, 30);
+                    }
+                } finally {
+                    graph.getModel().endUpdate();
+                }
+            });
+
             window.mxEvent.disableContextMenu(container);
         } else {
             console.error("mxGraph n'a pas été chargé correctement.");

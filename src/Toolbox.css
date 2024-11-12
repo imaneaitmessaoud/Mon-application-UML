@@ -1,0 +1,24 @@
+.toolbox {
+    background-color: #f4f4f4;
+    padding: 10px;
+    width: 150px;
+    border: 1px solid #ddd;
+}
+
+.toolbox h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.toolbox-item {
+    background-color: #e0e0e0;
+    margin: 5px 0;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: grab;
+    text-align: center;
+}
+
+.toolbox-item:hover {
+    background-color: #ccc;
+}
